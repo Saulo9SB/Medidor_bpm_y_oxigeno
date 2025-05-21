@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitoreo de Salud - Panel de Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #4285F4;
+      --secondary-color: #34A853;
+      --danger-color: #EA4335;
+      --warning-color: #FBBC05;
+      --light-gray: #f8f9fa;
+      --dark-gray: #343a40;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: var(--box-shadow);
+    }
+    
+    h1 {
+      font-weight: 500;
+      font-size: 2.2rem;
+    }
+    
+    h2 {
+      font-weight: 400;
+      color: var(--dark-gray);
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+    
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    
+    .card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 25px;
+      transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+    }
+    
+    .card-title i {
+      margin-right: 10px;
+    }
+    
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-size: 16px;
+      transition: border 0.3s;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+    }
+    
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: var(--border-radius);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+    
+    button:hover {
+      background-color: #3367d6;
+    }
+    
+    .status {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: var(--border-radius);
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .status.connected {
+      background-color: rgba(52, 168, 83, 0.1);
+      color: var(--secondary-color);
+    }
+    
+    .status.disconnected {
+      background-color: rgba(234, 67, 53, 0.1);
+      color: var(--danger-color);
+    }
+    
+    .sensor-data {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .sensor-item {
+      background-color: var(--light-gray);
+      padding: 15px;
+      border-radius: var(--border-radius);
+    }
+    
+    .sensor-label {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    
+    .sensor-value {
+      font-size: 24px;
+      font-weight: 500;
+    }
+    
+    .alert-container {
+      margin-top: 20px;
+      background-color: #fff8e1;
+      border-left: 4px solid var(--warning-color);
+      padding: 15px;
+      border-radius: var(--border-radius);
+    }
+    
+    .alert-title {
+      font-weight: 500;
+      color: var(--warning-color);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .alert-title i {
+      margin-right: 8px;
+    }
+    
+    .alert-message {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .alert-normal {
+      background-color: rgba(52, 168, 83, 0.1);
+      border-left-color: var(--secondary-color);
+    }
+    
+    .alert-normal .alert-title {
+      color: var(--secondary-color);
+    }
+    
+    .alert-warning {
+      background-color: rgba(251, 188, 5, 0.1);
+      border-left-color: var(--warning-color);
+    }
+    
+    .alert-danger {
+      background-color: rgba(234, 67, 53, 0.1);
+      border-left-color: var(--danger-color);
+    }
+    
+    .alert-danger .alert-title {
+      color: var(--danger-color);
+    }
+    
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+      
+      .sensor-data {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <!-- MQTT.js -->
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1><i class="fas fa-heartbeat"></i> Panel de Monitoreo de Salud</h1>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="dashboard">
+      <div class="card">
+        <h2 class="card-title"><i class="fas fa-user-edit"></i> Configuración del Paciente</h2>
+        <form id="mqttForm">
+          <div class="form-group">
+            <label for="edad">Edad del Paciente</label>
+            <input type="number" id="edad" name="edad" required min="1" max="120" placeholder="Ingrese la edad">
+          </div>
+          
+          <div class="form-group">
+            <label for="actividad">Nivel de Actividad</label>
+            <select id="actividad" name="actividad">
+              <option value="reposo">Reposo (sin actividad)</option>
+              <option value="cansada">Actividad Ligera (caminar, tareas domésticas)</option>
+              <option value="exhaustiva">Actividad Moderada (ejercicio moderado)</option>
+              <option value="muy exhaustiva">Actividad Intensa (ejercicio vigoroso)</option>
+            </select>
+          </div>
+          
+          <button type="submit"><i class="fas fa-paper-plane"></i> Enviar Datos</button>
+          
+          <div id="status" class="status disconnected">
+            <i class="fas fa-plug"></i> Desconectado del broker MQTT
+          </div>
+        </form>
+      </div>
+      
+      <div class="card">
+        <h2 class="card-title"><i class="fas fa-chart-line"></i> Datos en Tiempo Real</h2>
+        <div class="sensor-data">
+          <div class="sensor-item">
+            <div class="sensor-label">Temperatura Corporal</div>
+            <div class="sensor-value" id="temp">--</div>
+            <small>°C</small>
+          </div>
+          
+          <div class="sensor-item">
+            <div class="sensor-label">Humedad Ambiental</div>
+            <div class="sensor-value" id="hum">--</div>
+            <small>%</small>
+          </div>
+          
+          <div class="sensor-item">
+            <div class="sensor-label">Nivel de Oxígeno</div>
+            <div class="sensor-value" id="ox">--</div>
+            <small>%</small>
+          </div>
+          
+          <div class="sensor-item">
+            <div class="sensor-label">Frecuencia Cardíaca</div>
+            <div class="sensor-value" id="bpm">--</div>
+            <small>BPM</small>
+          </div>
+        </div>
+        
+        <div id="alert-container" class="alert-container alert-normal">
+          <div class="alert-title"><i class="fas fa-check-circle"></i> Estado del Paciente</div>
+          <div class="alert-message" id="alerta">Todos los parámetros dentro de rangos normales</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Conexión MQTT
+    const client = mqtt.connect('ws://Aqui va la ip del server monsquitto:9001');
+
+    client.on('connect', function () {
+      const statusElement = document.getElementById('status');
+      statusElement.textContent = 'Conectado al broker MQTT';
+      statusElement.className = 'status connected';
+    });
+
+    client.on('error', function (err) {
+      const statusElement = document.getElementById('status');
+      statusElement.textContent = 'Error de conexión: ' + err;
+      statusElement.className = 'status disconnected';
+    });
+
+    const form = document.getElementById('mqttForm');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const edad = document.getElementById('edad').value;
+      const actividad = document.getElementById('actividad').value;
+
+      client.publish('brazalete/edad', edad);
+      client.publish('brazalete/actividad', actividad);
+
+      const statusElement = document.getElementById('status');
+      statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Datos enviados correctamente';
+      statusElement.className = 'status connected';
+      
+      // Resetear el mensaje después de 3 segundos
+      setTimeout(() => {
+        statusElement.innerHTML = '<i class="fas fa-plug"></i> Conectado al broker MQTT';
+      }, 3000);
+    });
+
+    // Configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "aqui va la API_key de realtime firebase",
+      authDomain: "aqui va la autentificacion",
+      databaseURL: "aqui va la URL database real time",
+      projectId: "brazalete-lectura",
+      storageBucket: "brazalete-lectura.appspot.com",
+      messagingSenderId: "000000000000",
+      appId: "1:000000000000:web:abc123def456"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    // Autenticación anónima
+    firebase.auth().signInAnonymously().catch(function (error) {
+      console.error("Error al autenticar:", error);
+    });
+
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        const db = firebase.database();
+        const ref = db.ref("lecturas");
+
+        // Obtener el último registro
+        ref.limitToLast(1).on("value", function (snapshot) {
+          const data = snapshot.val();
+          if (data) {
+            const key = Object.keys(data)[0];
+            const lectura = data[key];
+
+            // Actualizar los valores en la interfaz
+            document.getElementById('temp').textContent = lectura.temperatura ? lectura.temperatura.toFixed(1) : '--';
+            document.getElementById('hum').textContent = lectura.humedad ? lectura.humedad.toFixed(1) : '--';
+            document.getElementById('ox').textContent = lectura.oxigeno ? lectura.oxigeno.toFixed(1) : '--';
+            document.getElementById('bpm').textContent = lectura.bpm ? lectura.bpm.toFixed(0) : '--';
+            
+            // Manejar la alerta
+            const alertContainer = document.getElementById('alert-container');
+            const alertMessage = document.getElementById('alerta');
+            
+            if (lectura.alerta) {
+              alertMessage.textContent = lectura.alerta;
+              
+              // Determinar el tipo de alerta basado en el contenido
+              if (lectura.alerta.toLowerCase().includes('baja') || lectura.alerta.toLowerCase().includes('hipoxemia')) {
+                alertContainer.className = 'alert-container alert-warning';
+                alertContainer.querySelector('.alert-title').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Advertencia';
+              } else if (lectura.alerta.toLowerCase().includes('emergencia') || lectura.alerta.toLowerCase().includes('crítico')) {
+                alertContainer.className = 'alert-container alert-danger';
+                alertContainer.querySelector('.alert-title').innerHTML = '<i class="fas fa-exclamation-circle"></i> Alerta Crítica';
+              } else {
+                alertContainer.className = 'alert-container alert-normal';
+                alertContainer.querySelector('.alert-title').innerHTML = '<i class="fas fa-check-circle"></i> Estado del Paciente';
+              }
+            } else {
+              alertMessage.textContent = 'Todos los parámetros dentro de rangos normales';
+              alertContainer.className = 'alert-container alert-normal';
+              alertContainer.querySelector('.alert-title').innerHTML = '<i class="fas fa-check-circle"></i> Estado del Paciente';
+            }
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
