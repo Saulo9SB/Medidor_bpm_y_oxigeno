@@ -4,6 +4,24 @@
 #import webrepl
 #webrepl.start()
 # This file is executed on every boot (including wake-boot from deepsleep)
+"""
+Este programa implementa un sistema de captura y almacenamiento remoto de imágenes
+utilizando un módulo ESP32-CAM, diseñado para aplicaciones IoT en el área de telemedicina y monitoreo remoto.
+El código realiza las siguientes funciones clave:
+
+-  Conexión WiFi
+-  Captura de imágenes
+-  Almacenamiento en Google Drive
+
+Autores:
+    Saulo Blas Silva Brandi (Integración hardware/software)
+    Avila Cano Rafael (Desarrollo de Apps Script y API)
+    Angel Gerardo Mendoza Granados (Optimización de imagen y WiFi)
+
+Fecha: 20 de mayo de 2025
+Práctica: Sistema de Captura Médica con ESP32-CAM y Google Drive
+"""
+
 import urequests
 import ubinascii
 import time
